@@ -2,7 +2,8 @@
   "name": "mcp-platform",
   "version": "1.0.0",
   "description": "Model Context Protocol Server for Document Workflows and Project Management",
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/server.ts",
