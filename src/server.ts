@@ -134,7 +134,10 @@ class MCPDocWorkflowServer {
       try {
         switch (name) {
           case 'download_file':
-            const downloadSuccess = await this.workflowManager.processDownload(args.url);
+            if (!args || typeof args !== 'object' || !('url' in args)) {
+              throw new Error('Missing required parameter: url');
+            }
+            const downloadSuccess = await this.workflowManager.processDownload(args.url as string);
             return {
               content: [
                 {
@@ -147,20 +150,26 @@ class MCPDocWorkflowServer {
             };
 
           case 'extract_archive':
-            const extractSuccess = await this.workflowManager.processUnzip(args.targetPath || 'documentation');
+            const targetPath = args && typeof args === 'object' && 'targetPath' in args 
+              ? (args.targetPath as string) 
+              : 'documentation';
+            const extractSuccess = await this.workflowManager.processUnzip(targetPath);
             return {
               content: [
                 {
                   type: 'text',
                   text: extractSuccess
-                    ? `Successfully extracted archive to ${args.targetPath || 'documentation'}`
+                    ? `Successfully extracted archive to ${targetPath}`
                     : 'Failed to extract archive',
                 },
               ],
             };
 
           case 'validate_patterns':
-            const validateSuccess = await this.workflowManager.processValidate(args.pattern);
+            if (!args || typeof args !== 'object' || !('pattern' in args)) {
+              throw new Error('Missing required parameter: pattern');
+            }
+            const validateSuccess = await this.workflowManager.processValidate(args.pattern as string);
             return {
               content: [
                 {
@@ -173,7 +182,10 @@ class MCPDocWorkflowServer {
             };
 
           case 'execute_script':
-            const scriptSuccess = await this.workflowManager.processImplement(args.scriptName);
+            if (!args || typeof args !== 'object' || !('scriptName' in args)) {
+              throw new Error('Missing required parameter: scriptName');
+            }
+            const scriptSuccess = await this.workflowManager.processImplement(args.scriptName as string);
             return {
               content: [
                 {
