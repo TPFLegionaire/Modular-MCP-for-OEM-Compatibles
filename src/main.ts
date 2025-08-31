@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { DocWorkflowManager } from './docs/DocWorkflowManager';
+import { DocWorkflowManager } from './docs/DocWorkflowManager.js';
 
 async function main() {
   console.log('Starting documentation workflow processing...');
