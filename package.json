@@ -1,10 +1,12 @@
 {
   "name": "mcp-platform",
   "version": "1.0.0",
-  "description": "Modular MCP for OEM Compatibles",
+  "description": "Model Context Protocol Server for Document Workflows and Project Management",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "dev": "ts-node src/server.ts",
+    "start": "node dist/server.js",
     "test": "jest",
     "lint": "eslint src/**/*.ts",
     "typecheck": "tsc --noEmit"
