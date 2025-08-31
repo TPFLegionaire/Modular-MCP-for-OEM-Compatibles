@@ -1,0 +1,23 @@
+# App Flow Document
+
+## Onboarding and Sign-In/Sign-Up
+A new user begins by discovering the Modular Control Panel (MCP) tool on its public repository. They clone or download the repository to their development machine and install the required build tools and language runtimes. After running the provided setup commands or invoking the build system, the user has the command-line interface available. This application does not implement a user account system, so there is no sign-in or sign-out process and no password recovery flow. Once the CLI tool is installed and accessible on the system path, the user is ready to configure and run the MCP.
+
+## Main Dashboard or Home Page
+When the user launches the CLI tool without arguments or runs the status command, the application displays its equivalent of a main dashboard. This summary view shows the list of modules detected by the core manager, each module’s initialization status, and any recent events or warnings. The dashboard header indicates the configuration file in use and the overall health of the system. From this view, the user can move into further commands that drill into module details, adjust settings, or issue direct hardware commands.
+
+## Detailed Feature Flows and Page Transitions
+To start the control panel, the user invokes the start command along with a path to their configuration file. The CLI parses the configuration, validates its schema, and passes the settings to the core manager. The manager dynamically loads each declared module, injects the required dependencies, and initializes communication with the underlying hardware buses. As each module reports success or failure, the user sees progress messages streamed to their terminal.
+
+With the system running, the user can issue interactive commands to individual modules. For example, sending a fan speed adjustment command requires the user to specify the module name and desired speed value. The CLI routes this request through the core manager to the relevant HAL module, which performs the register writes and returns a confirmation. The user views the result as an updated status line or an event message. Advanced users can open an interactive shell mode within the CLI to navigate between modules, inspect live sensor values, or replay historical logs.
+
+Developers extending the system can place new module binaries into the designated modules directory and reference them in the configuration file. When the user next starts the MCP, the core manager detects the new module, resolves its dependencies, and makes it available for commands just like the built-in modules. This dynamic loading flow allows experimentation and runtime upgrades without changing the central application code.
+
+## Settings and Account Management
+All operational settings are centralized in the external JSON or YAML configuration file. Users update module parameters, communication bus settings, and event thresholds by editing this file in a text editor. There is no separate account or user profile to manage; each configuration file defines the entire runtime environment. After saving changes, the user restarts the CLI with the same start command to apply new settings. The CLI confirms that the updated parameters have been loaded and reflects them in the next status output.
+
+## Error States and Alternate Paths
+If the user provides a malformed configuration file or omits required parameters, the CLI fails during startup and prints a clear error message identifying the issue and the line number. Missing module binaries trigger a warning and prevent the system from entering full operational mode. When hardware communication fails—due to a disconnected bus or a device error—the responsible module logs the exception and signals the core manager, which marks that module as degraded. The user sees an error message in the dashboard and can retry the command, adjust settings, or replace the hardware. In all cases, the CLI returns a nonzero exit code so that scripts or automation systems can detect failures.
+
+## Conclusion and Overall App Journey
+From initial download and setup to everyday interactions, the MCP user journey revolves around editing a configuration file, starting the CLI, and issuing commands to control OEM hardware modules. The application’s dynamic loading, clear status dashboard, and graceful error handling ensure that the user can onboard new devices quickly, monitor system health, and extend functionality without altering the core application. Each step flows naturally into the next, providing a cohesive experience for integrating, managing, and operating a modular control panel for diverse hardware environments.
